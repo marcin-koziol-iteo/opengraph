@@ -50,7 +50,9 @@ class OpenGraph(dict):
         """
         # raw = urllib2.urlopen(url)
         # html = raw.read()
-        html = requests.get(url).content
+        
+        headers = { 'User-Agent': 'Mozilla/5.0'}
+        html = requests.get(url, headers=headers).content
         return self.parser(html)
         
     def parser(self, html):
