@@ -78,6 +78,7 @@ class OpenGraph(dict):
                         self[attr] = getattr(self, 'scrape_%s' % attr)(doc)
                     except AttributeError:
                         pass
+            self.scraped = True
 
     def valid_attr(self, attr):
         return hasattr(self, attr) and len(self[attr]) > 0
