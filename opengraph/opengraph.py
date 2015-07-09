@@ -2,6 +2,13 @@
 
 import re
 # import urllib2
+
+try:
+    import urllib3.contrib.pyopenssl
+    urllib3.contrib.pyopenssl.inject_into_urllib3()
+except Exception as e:
+    pass
+    
 import requests
 try:
     from bs4 import BeautifulSoup
@@ -32,7 +39,7 @@ class OpenGraph(dict):
             self[k] = kwargs[k]
         
         dict.__init__(self)
-        
+
         if headers:
             self.headers = headers
         else:
@@ -59,8 +66,8 @@ class OpenGraph(dict):
     def parser(self, html):
         """
         """
-        if not isinstance(html,BeautifulSoup):
-            doc = BeautifulSoup(html)
+        if not isinstance(html, BeautifulSoup):
+            doc = BeautifulSoup(html, "lxml")
         else:
             doc = html
         
