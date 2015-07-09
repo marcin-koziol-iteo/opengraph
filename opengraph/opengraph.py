@@ -21,7 +21,7 @@ class OpenGraph(dict):
 
     required_attrs = ['title', 'type', 'image', 'url', 'description']
 
-    def __init__(self, url=None, html=None, scrape=False, **kwargs):
+    def __init__(self, url=None, html=None, scrape=False, headers=None, **kwargs):
         # If scrape == True, then will try to fetch missing attribtues
         # from the page's body
 
@@ -32,9 +32,14 @@ class OpenGraph(dict):
             self[k] = kwargs[k]
         
         dict.__init__(self)
-                
+        
+        if headers:
+            self.headers = headers
+        else:
+            self.headers = { 'User-Agent': 'Mozilla/5.0' }
+
         if url is not None:
-            self.fetch(url)
+            self.fetch(url, self.headers)
             
         if html is not None:
             self.parser(html)
@@ -45,13 +50,13 @@ class OpenGraph(dict):
     def __getattr__(self, name):
         return self[name]
             
-    def fetch(self, url):
+    def fetch(self, url, headers=None):
         """
         """
         # raw = urllib2.urlopen(url)
         # html = raw.read()
         
-        headers = { 'User-Agent': 'Mozilla/5.0'}
+        
         html = requests.get(url, headers=headers).content
         return self.parser(html)
         
