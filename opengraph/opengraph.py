@@ -53,10 +53,6 @@ class OpenGraph(dict):
     def fetch(self, url, headers=None):
         """
         """
-        # raw = urllib2.urlopen(url)
-        # html = raw.read()
-        
-        
         html = requests.get(url, headers=headers).content
         return self.parser(html)
         
