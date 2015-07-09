@@ -1,26 +1,30 @@
 # encoding: utf-8
 
 import re
-# import urllib2
+import requests
 
+# Inject pyopenssl into urllib3 to prevent warnings
 try:
     import urllib3.contrib.pyopenssl
     urllib3.contrib.pyopenssl.inject_into_urllib3()
 except Exception as e:
     pass
-    
-import requests
+
+# BeautifulSoup processing
 try:
     from bs4 import BeautifulSoup
 except ImportError:
     from BeautifulSoup import BeautifulSoup
 
+# Import JSON
 global import_json
 try:
     import json
     import_json = True
 except ImportError:
     import_json = False
+
+
 
 class OpenGraph(dict):
     """
