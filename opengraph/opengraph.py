@@ -64,7 +64,12 @@ class OpenGraph(dict):
     def fetch(self, url, headers=None):
         """
         """
-        html = requests.get(url, headers=headers).content
+        request_obj = requests.get(url, headers=headers)
+        html = request_obj.content
+
+	# Since there might be a redirect, get the final url from request object
+        self._url = request_obj.url
+
         return self.parser(html)
         
     def parser(self, html):
