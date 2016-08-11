@@ -84,10 +84,26 @@ class OpenGraph(dict):
         # ogs = doc.html.head.findAll(property=re.compile(r'^og'))
         ogs = doc.html.findAll(property=re.compile(r'^og'))
         
+        # Look at every og tag
         for og in ogs:
             if og.has_attr(u'content'):
-                self[og[u'property'][3:]]=og[u'content']
-        # Couldn't fetch all attrs from og tags, try scraping body
+                # Store property name minus the "og:"
+                prop_name = og[u'property'][3:]
+
+                # If this is a video property, create a list since many sites offer alternative formats
+                if 'video' in prop_name:
+                    # If first time, init the list with property content
+                    if prop_name not in self:
+                        self[prop_name] = [ og[u'content'] ]
+                    # else append to the list with property content
+                    else:
+                        self[prop_name].append(og[u'content'])
+                # For non-video properties, just copy the content
+                # NOTE: this means that for duplicate properties, only the last one survives
+                else:
+                    self[prop_name] = og[u'content']
+        
+        # Couldn't fetch all required attrs from og tags, try scraping body
         if not self.is_valid() and self.scrape:
             for attr in self.required_attrs:
                 if not self.valid_attr(attr):
