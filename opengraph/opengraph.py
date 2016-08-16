@@ -163,6 +163,6 @@ class OpenGraph(dict):
         return self._url
 
     def scrape_description(self, doc):
-        tag = doc.html.head.findAll('meta', attrs={"name":"description"})
+        tag = doc.html.head.findAll('meta', attrs={"name":re.compile("^description$", re.I)})
         result = "".join([t['content'] for t in tag])
         return result
