@@ -29,8 +29,10 @@ except ImportError:
 class OpenGraph(dict):
     """
     """
-
-    required_attrs = ['title', 'type', 'image', 'url', 'description']
+    
+    user_agent        = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+    user_agent_header = 'User-Agent'
+    required_attrs    = ['title', 'type', 'image', 'url', 'description']
 
     def __init__(self, url=None, html=None, scrape=False, headers=None, **kwargs):
         # If scrape == True, then will try to fetch missing attribtues
@@ -44,10 +46,16 @@ class OpenGraph(dict):
         
         dict.__init__(self)
 
+        # Handle custom http headers
         if headers:
             self.headers = headers
+            
+            # Add in the user agent header if not provided
+            if self.user_agent_header not in self.headers:
+            	self.headers[self.user_agent_header: self.user_agent }
         else:
-            self.headers = { 'User-Agent': 'Mozilla/5.0' }
+            # Always have user agent header at a minimum
+            self.headers = { self.user_agent_header: self.user_agent }
 
         if url is not None:
             self.fetch(url, self.headers)
