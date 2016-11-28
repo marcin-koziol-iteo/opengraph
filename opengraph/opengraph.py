@@ -52,10 +52,10 @@ class OpenGraph(dict):
             
             # Add in the user agent header if not provided
             if self.user_agent_header not in self.headers:
-            	self.headers[self.user_agent_header: self.user_agent }
+                self.headers[self.user_agent_header] = self.user_agent
         else:
             # Always have user agent header at a minimum
-            self.headers = { self.user_agent_header: self.user_agent }
+            self.headers = {self.user_agent_header: self.user_agent}
 
         if url is not None:
             self.fetch(url, self.headers)
@@ -75,7 +75,7 @@ class OpenGraph(dict):
         request_obj = requests.get(url, headers=headers)
         html = request_obj.content
 
-	# Since there might be a redirect, get the final url from request object
+    # Since there might be a redirect, get the final url from request object
         self._url = request_obj.url
 
         return self.parser(html)
