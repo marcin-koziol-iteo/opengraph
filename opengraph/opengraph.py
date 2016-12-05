@@ -38,8 +38,11 @@ class OpenGraph(dict):
         # If scrape == True, then will try to fetch missing attribtues
         # from the page's body
 
+        self.scraped = False
         self.scrape = scrape
         self._url = url
+
+        self.doc = None
 
         for k in kwargs.keys():
             self[k] = kwargs[k]
@@ -87,7 +90,9 @@ class OpenGraph(dict):
             doc = BeautifulSoup(html, "lxml")
         else:
             doc = html
-        
+
+        self.doc = doc
+
         # Some sites only have og tags in the header, some in the body
         # ogs = doc.html.head.findAll(property=re.compile(r'^og'))
         ogs = doc.html.findAll(property=re.compile(r'^og'))
@@ -174,3 +179,6 @@ class OpenGraph(dict):
         tag = doc.html.head.findAll('meta', attrs={"name":re.compile("description$", re.I)})
         result = "".join([t['content'] for t in tag])
         return result
+
+    def run_extractor(self, func):
+        return func(self.doc)
