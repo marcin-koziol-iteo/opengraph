@@ -181,4 +181,4 @@ class OpenGraph(dict):
         return result
 
     def run_extractor(self, func):
-        return func(self.doc)
+        return func(self.doc, self._url)
