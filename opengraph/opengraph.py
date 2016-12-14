@@ -130,7 +130,10 @@ class OpenGraph(dict):
         return hasattr(self, attr) and len(self[attr]) > 0
 
     def is_valid(self):
-        return all([self.valid_attr(attr) for attr in self.required_attrs])
+        try:
+            return all([self.valid_attr(attr) for attr in self.required_attrs])
+        except KeyError:
+            return False
         
     def to_html(self):
         if not self.is_valid():
