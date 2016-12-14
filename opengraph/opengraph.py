@@ -70,12 +70,15 @@ class OpenGraph(dict):
         self[name] = val
 
     def __getattr__(self, name):
-        return self[name]
+        try:
+            return self[name]
+        except KeyError:
+            return ''
             
     def fetch(self, url, headers=None):
         """
         """
-        request_obj = requests.get(url, headers=headers)
+        request_obj = requests.get(url, headers=headers, timeout=3)
         html = request_obj.content
 
     # Since there might be a redirect, get the final url from request object
@@ -158,8 +161,7 @@ class OpenGraph(dict):
         pass
 
     def scrape_image(self, doc):
-        images = [dict(img.attrs)['src']
-            for img in doc.html.body.findAll('img')]
+        images = [dict(img.attrs).get('src', '') for img in doc.html.body.findAll('img') if dict(img.attrs).get('src', '')]
 
         if images:
             return images[0]
