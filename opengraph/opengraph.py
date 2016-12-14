@@ -70,11 +70,8 @@ class OpenGraph(dict):
         self[name] = val
 
     def __getattr__(self, name):
-        try:
-            return self[name]
-        except KeyError:
-            return ''
-            
+        return self[name]
+
     def fetch(self, url, headers=None):
         """
         """
