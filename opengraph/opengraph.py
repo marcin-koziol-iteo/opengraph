@@ -75,7 +75,7 @@ class OpenGraph(dict):
     def fetch(self, url, headers=None):
         """
         """
-        request_obj = requests.get(url, headers=headers, timeout=3)
+        request_obj = requests.get(url, headers=headers, timeout=(3, 5))
         html = request_obj.content
 
     # Since there might be a redirect, get the final url from request object
