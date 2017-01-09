@@ -43,6 +43,7 @@ class OpenGraph(dict):
         self._url = url
 
         self.doc = None
+        self.response_headers = None
 
         for k in kwargs.keys():
             self[k] = kwargs[k]
@@ -77,6 +78,7 @@ class OpenGraph(dict):
         """
         request_obj = requests.get(url, headers=headers, timeout=(3, 5))
         html = request_obj.content
+        self.response_headers = request_obj.headers
 
     # Since there might be a redirect, get the final url from request object
         self._url = request_obj.url
